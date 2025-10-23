@@ -1,9 +1,3 @@
-# 2022 11,12 지역별 매출 (o)
-# 2022 11,12 지역별 인기 많은 상품 (o)
-# 2022 11,12 매출 증감률 (o)
-
-
-
 
 show tables;
 
@@ -23,7 +17,7 @@ select distinct city
 from restaurant
 order by 1;
 
-#------------2022.11, 12 Purchase amount for each city------------------------------------------------------------------------------
+#------------2022.11, 12 Total Sales ----------------------------------------------------------------------------
 select distinct city, round(sum(Price * Quantity),2) as Purchase_Amount, date_format(date, '%Y-%m') as PurchaseMonth
 from restaurant
 where year(date) = 2022 and month(date) = 11 
@@ -48,7 +42,7 @@ SELECT
   GROUP BY City, Product, `Date`
 order by `Date` asc;
 
-#------2022.11,12 most favorite products for each city----------------------------------------------------------------------------------------------------------
+#------2022.11,12 most favorite products by cities----------------------------------------------------------------------------------------------------------
 
 WITH CityProductSales AS (
   SELECT 
@@ -57,7 +51,7 @@ WITH CityProductSales AS (
     SUM(Price * Quantity) AS TotalSales
   FROM restaurant
   WHERE YEAR(Date) = 2022 
-    AND MONTH(Date) = 11 #12 <- December
+    AND MONTH(Date) = 11 
   GROUP BY City, Product
 ),
 MaxByCity AS (
@@ -104,7 +98,7 @@ JOIN MaxByCity AS m
   ON m.City = cps.City
  AND m.MaxSales = cps.TotalSales
 ORDER BY cps.City, cps.Product;
-#------2022.11,12 매출 증감률 -> 월별 상품 매출 그리고 증감률------------------------------------------------------------------------------------------------------------------------------
+#------2022 11, 12 Sales Distribution by Products w/ increment rate------------------------------------------------------------------------------------------------------------------------------
 WITH NOVEMBER AS (
              SELECT Product, round(sum(Price*Quantity),2) as NovSales
              FROM restaurant
